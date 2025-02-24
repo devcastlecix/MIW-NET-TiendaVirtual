@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "c4caccaf-acbd-427e-9c25-24974934bcb1",
+		"name": "MIW",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3053983"
+	},
+	"item": [
+		{
+			"name": "NET",
+			"item": [
+				{
+					"name": "Devolver Producto ID:1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44339/api/producto/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44339",
+							"path": [
+								"api",
+								"producto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Azure Adventures with C#\",\r\n    \"descripcion\": \"Azure Adventures with C#: First Steps for C# Developers into Azure Cloud\",\r\n    \"isbn\": \"ISBN 979-8868804236\",\r\n    \"cantidadDisponible\": 11,\r\n    \"imagenVinculada\": \"azure-adventures-csharp-first-steps.jpg\",\r\n    \"precio\": 17.58\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44339/api/producto/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44339",
+							"path": [
+								"api",
+								"producto",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44339/api/producto/",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44339",
+							"path": [
+								"api",
+								"producto",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44339/api/producto/16",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44339",
+							"path": [
+								"api",
+								"producto",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"id\": 9,\r\n    \"nombre\": \"Functional Programming with C#\",\r\n    \"descripcion\": \"Functional Programming with C#: Unlock coding brilliance with the power of functional magic\",\r\n    \"isbn\": \"ISBN 978-1805122685\",\r\n    \"cantidadDisponible\": 10,\r\n    \"imagenVinculada\": \"functional-programming-csharp-coding.jpg\",\r\n    \"precio\": 22.11\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44339/api/producto/9",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44339",
+							"path": [
+								"api",
+								"producto",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

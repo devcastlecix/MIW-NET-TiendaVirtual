@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ModeloTiendaVirtual.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModeloTiendaVirtualStoreContainer">
+    <EntitySet Name="ProductosLibros" EntityType="ModeloTiendaVirtual.Store.ProductosLibros" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Pedidos" EntityType="ModeloTiendaVirtual.Store.Pedidos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ventas" EntityType="ModeloTiendaVirtual.Store.Ventas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StocksAlerta" EntityType="ModeloTiendaVirtual.Store.StocksAlerta" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Ventas_ProductosLibros" Association="ModeloTiendaVirtual.Store.FK_Ventas_ProductosLibros">
+      <End Role="ProductoLibro" EntitySet="ProductosLibros" />
+      <End Role="Venta" EntitySet="Ventas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ventas_Pedidos" Association="ModeloTiendaVirtual.Store.FK_Ventas_Pedidos">
+      <End Role="Pedido" EntitySet="Pedidos" />
+      <End Role="Venta" EntitySet="Ventas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StocksAlerta_ProductosLibros" Association="ModeloTiendaVirtual.Store.FK_StocksAlerta_ProductosLibros">
+      <End Role="ProductoLibro" EntitySet="ProductosLibros" />
+      <End Role="StockAlerta" EntitySet="StocksAlerta" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ProductosLibros">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" Nullable="false" MaxLength="255" />
+    <Property Name="Descripcion" Type="nvarchar" Nullable="true" MaxLength="1000" />
+    <Property Name="ISBN" Type="nvarchar" Nullable="false" MaxLength="25" />
+    <Property Name="CantidadDisponible" Type="int" Nullable="false" />
+    <Property Name="ImagenVinculada" Type="nvarchar" Nullable="false" MaxLength="500" />
+    <Property Name="Precio" Type="decimal" Nullable="false" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="Pedidos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FechaCompra" Type="datetime" Nullable="true" />
+    <Property Name="PrecioTotal" Type="decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="Usuario" Type="nvarchar" Nullable="false" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Ventas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PedidoId" Type="int" Nullable="false" />
+    <Property Name="ProductoId" Type="int" Nullable="false" />
+    <Property Name="Cantidad" Type="int" Nullable="false" />
+    <Property Name="Subtotal" Type="decimal" Nullable="false" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="StocksAlerta">
+    <Key>
+      <PropertyRef Name="ProductoId" />
+    </Key>
+    <Property Name="ProductoId" Type="int" Nullable="false" />
+    <Property Name="ReStock" Type="bit" Nullable="false" />
+    <Property Name="FechaUltimaAlerta" Type="datetime" Nullable="true" />
+  </EntityType>
+  <Association Name="FK_Ventas_ProductosLibros">
+    <End Role="ProductoLibro" Type="ModeloTiendaVirtual.Store.ProductosLibros" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Venta" Type="ModeloTiendaVirtual.Store.Ventas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductoLibro">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="ProductoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ventas_Pedidos">
+    <End Role="Pedido" Type="ModeloTiendaVirtual.Store.Pedidos" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Venta" Type="ModeloTiendaVirtual.Store.Ventas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pedido">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="PedidoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StocksAlerta_ProductosLibros">
+    <End Role="ProductoLibro" Type="ModeloTiendaVirtual.Store.ProductosLibros" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="StockAlerta" Type="ModeloTiendaVirtual.Store.StocksAlerta" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="ProductoLibro">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StockAlerta">
+        <PropertyRef Name="ProductoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+
+    <!-- CSDL content (entidades y asociaciones) -->
+    <edmx:ConceptualModels>
+      <Schema 
+        xmlns="http://schemas.microsoft.com/ado/2009/11/edm"
+        xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration"
+        xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator"
+        xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation"
+        Namespace="ModeloTiendaVirtual"
+        Alias="Self"
+        annotation:UseStrongSpatialTypes="false">
+
+        <!-- Entidad ProductoLibro -->
+        <EntityType Name="ProductoLibro">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="255" />
+          <Property Name="Descripcion" Type="String" Nullable="true" MaxLength="1000" />
+          <Property Name="ISBN" Type="String" Nullable="false" MaxLength="25" />
+          <Property Name="CantidadDisponible" Type="Int32" Nullable="false" />
+          <Property Name="ImagenVinculada" Type="String" Nullable="false" MaxLength="500" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+
+          <!-- Relación 1-* con Venta -->
+          <NavigationProperty 
+            Name="Ventas" 
+            Relationship="ModeloTiendaVirtual.FK_Ventas_ProductosLibros" 
+            FromRole="ProductoLibro" 
+            ToRole="Venta" />
+        </EntityType>
+
+        <!-- Entidad Pedido -->
+        <EntityType Name="Pedido">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FechaCompra" Type="DateTime" Nullable="true" />
+          <Property Name="PrecioTotal" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Usuario" Type="String" Nullable="false" MaxLength="255" />
+
+          <!-- Relación 1-* con Venta -->
+          <NavigationProperty 
+            Name="Ventas" 
+            Relationship="ModeloTiendaVirtual.FK_Ventas_Pedidos" 
+            FromRole="Pedido" 
+            ToRole="Venta" />
+        </EntityType>
+
+        <!-- Entidad Venta -->
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PedidoId" Type="Int32" Nullable="false" />
+          <Property Name="ProductoId" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Subtotal" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+
+          <!-- Relación *-1 con ProductoLibro -->
+          <NavigationProperty 
+            Name="ProductoLibro" 
+            Relationship="ModeloTiendaVirtual.FK_Ventas_ProductosLibros" 
+            FromRole="Venta" 
+            ToRole="ProductoLibro" />
+
+          <!-- Relación *-1 con Pedido -->
+          <NavigationProperty 
+            Name="Pedido" 
+            Relationship="ModeloTiendaVirtual.FK_Ventas_Pedidos" 
+            FromRole="Venta" 
+            ToRole="Pedido" />
+        </EntityType>
+
+        <!-- Entidad StockAlerta -->
+        <EntityType Name="StockAlerta">
+          <Key>
+            <PropertyRef Name="ProductoId" />
+          </Key>
+          <Property Name="ProductoId" Type="Int32" Nullable="false" />
+          <Property Name="ReStock" Type="Boolean" Nullable="false" />
+
+          <!-- Relación 0..1-1 con ProductoLibro -->
+          <NavigationProperty 
+            Name="ProductoLibro" 
+            Relationship="ModeloTiendaVirtual.FK_StocksAlerta_ProductosLibros" 
+            FromRole="StockAlerta" 
+            ToRole="ProductoLibro" />
+          <Property Name="FechaUltimaAlerta" Type="DateTime" Nullable="true" />
+        </EntityType>
+
+        <!-- Contenedor del modelo -->
+        <EntityContainer Name="TiendaVirtualDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Ventas" EntityType="Self.Venta" store:Type="Tables" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedido" store:Type="Tables" />
+          <EntitySet Name="ProductosLibros" EntityType="Self.ProductoLibro" store:Type="Tables" />
+          <EntitySet Name="StocksAlerta" EntityType="Self.StockAlerta" store:Type="Tables" />
+
+          <!-- Asociación Ventas-ProductosLibros -->
+          <AssociationSet 
+            Name="FK_Ventas_ProductosLibros" 
+            Association="ModeloTiendaVirtual.FK_Ventas_ProductosLibros">
+            <End Role="ProductoLibro" EntitySet="ProductosLibros" />
+            <End Role="Venta" EntitySet="Ventas" />
+          </AssociationSet>
+
+          <!-- Asociación Ventas-Pedidos -->
+          <AssociationSet 
+            Name="FK_Ventas_Pedidos" 
+            Association="ModeloTiendaVirtual.FK_Ventas_Pedidos">
+            <End Role="Pedido" EntitySet="Pedidos" />
+            <End Role="Venta" EntitySet="Ventas" />
+          </AssociationSet>
+
+          <!-- Asociación StocksAlerta-ProductosLibros -->
+          <AssociationSet 
+            Name="FK_StocksAlerta_ProductosLibros" 
+            Association="ModeloTiendaVirtual.FK_StocksAlerta_ProductosLibros">
+            <End Role="ProductoLibro" EntitySet="ProductosLibros" />
+            <End Role="StockAlerta" EntitySet="StocksAlerta" />
+          </AssociationSet>
+        </EntityContainer>
+
+        <!-- Asociación Ventas-ProductosLibros -->
+        <Association Name="FK_Ventas_ProductosLibros">
+          <End Type="ModeloTiendaVirtual.ProductoLibro" Role="ProductoLibro" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModeloTiendaVirtual.Venta" Role="Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductoLibro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <!-- Asociación StocksAlerta-ProductosLibros -->
+        <Association Name="FK_StocksAlerta_ProductosLibros">
+          <End Type="ModeloTiendaVirtual.ProductoLibro" Role="ProductoLibro" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModeloTiendaVirtual.StockAlerta" Role="StockAlerta" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ProductoLibro">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockAlerta">
+              <PropertyRef Name="ProductoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <!-- Asociación Ventas-Pedidos -->
+        <Association Name="FK_Ventas_Pedidos">
+          <End Type="ModeloTiendaVirtual.Pedido" Role="Pedido" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ModeloTiendaVirtual.Venta" Role="Venta" Multiplicity="*" >
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="PedidoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+
+    <!-- C-S mapping content (vacío hasta que generes la DB) -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModeloTiendaVirtualStoreContainer" CdmEntityContainer="TiendaVirtualDBEntities">
+    <EntitySetMapping Name="Ventas">
+      <EntityTypeMapping TypeName="IsTypeOf(ModeloTiendaVirtual.Venta)">
+        <MappingFragment StoreEntitySet="Ventas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PedidoId" ColumnName="PedidoId" />
+          <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+          <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+          <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pedidos">
+      <EntityTypeMapping TypeName="IsTypeOf(ModeloTiendaVirtual.Pedido)">
+        <MappingFragment StoreEntitySet="Pedidos">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+          <ScalarProperty Name="PrecioTotal" ColumnName="PrecioTotal" />
+          <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductosLibros">
+      <EntityTypeMapping TypeName="IsTypeOf(ModeloTiendaVirtual.ProductoLibro)">
+        <MappingFragment StoreEntitySet="ProductosLibros">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+          <ScalarProperty Name="CantidadDisponible" ColumnName="CantidadDisponible" />
+          <ScalarProperty Name="ImagenVinculada" ColumnName="ImagenVinculada" />
+          <ScalarProperty Name="Precio" ColumnName="Precio" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StocksAlerta">
+      <EntityTypeMapping TypeName="IsTypeOf(ModeloTiendaVirtual.StockAlerta)">
+        <MappingFragment StoreEntitySet="StocksAlerta">
+          <ScalarProperty Name="ProductoId" ColumnName="ProductoId" />
+          <ScalarProperty Name="ReStock" ColumnName="ReStock" />
+          <ScalarProperty Name="FechaUltimaAlerta" ColumnName="FechaUltimaAlerta" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <!-- "Ninguno" = no genera clases automáticamente.
+             Usa "Legacy ObjectContext" o "T4" si deseas que cree las clases. -->
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

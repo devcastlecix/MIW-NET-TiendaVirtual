@@ -1,0 +1,33 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.ellipsis {
+    max-height: 250px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.ellipsis::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(transparent, white);
+}
+.cursor-pointer {
+    cursor: pointer;
+}

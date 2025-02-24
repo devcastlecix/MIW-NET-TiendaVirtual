@@ -1,0 +1,90 @@
+﻿@model TiendaVirtual.Models.ProductoLibro
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<br />
+<h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+    </svg>
+    <strong>Detalles del producto de Libro</strong>
+</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ISBN)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CantidadDisponible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CantidadDisponible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImagenVinculada)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/Images/@Model.ImagenVinculada" alt="Imagen del producto" class="img-fluid fixed-size cursor-pointer"
+                 data-bs-toggle="modal" data-bs-target="#modalImagen"
+                 data-titulomodal="@Html.DisplayFor(model => model.Nombre)"
+                 data-urlimagen="/Images/@Model.ImagenVinculada" />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Precio)
+        </dd>
+    </dl>
+
+    <div>
+        @if (ViewBag.View == "stockalerta")
+        {
+            @Html.ActionLink("Volver", "Index", "StocksAlerta", null, new { @class = "btn btn-secondary mt-2" })
+        }
+        else
+        {
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary mt-2" })
+        }
+
+    </div>
+</div>
+@Html.Partial("_ModalPartial")
+<style>
+    .fixed-size {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+    }
+</style>
+@section Scripts {
+    <script>
+        var modalImagen = document.getElementById('modalImagen')
+        modalImagen.addEventListener('show.bs.modal', function (event) {            
+            console.log(event.relatedTarget.dataset);
+            var titulomodal = event.relatedTarget.dataset.titulomodal;
+            var urlimagen = event.relatedTarget.dataset.urlimagen;
+            document.getElementById('titleImageModal').innerText = titulomodal;
+            document.getElementById('previewImageModal').setAttribute('src', urlimagen);
+        })
+    </script>
+}

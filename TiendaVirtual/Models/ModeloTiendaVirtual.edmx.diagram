@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a6fc1f50d17e440bb589d07ad0e3ed2d" Name="Diagram1" >
+        <EntityTypeShape EntityType="ModeloTiendaVirtual.ProductoLibro" Width="1.75" PointX="0.5" PointY="0.875" />
+        <EntityTypeShape EntityType="ModeloTiendaVirtual.Pedido" Width="1.5" PointX="0.875" PointY="4.25" />
+        <EntityTypeShape EntityType="ModeloTiendaVirtual.Venta" Width="1.5" PointX="5.25" PointY="3.625" />
+        <AssociationConnector Association="ModeloTiendaVirtual.FK_VentasPedidos_Pedidos" ManuallyRouted="false" >
+        </AssociationConnector>
+        <EntityTypeShape EntityType="ModeloTiendaVirtual.StockAlerta" Width="1.5" PointX="5.875" PointY="1" />
+        <AssociationConnector Association="ModeloTiendaVirtual.FK_Ventas_Pedidos" />
+        <AssociationConnector Association="ModeloTiendaVirtual.FK_Ventas_ProductosLibros" />
+        <AssociationConnector Association="ModeloTiendaVirtual.FK_StocksAlerta_ProductosLibros" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

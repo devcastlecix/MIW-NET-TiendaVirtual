@@ -1,0 +1,175 @@
+﻿@model IEnumerable<TiendaVirtual.Models.ProductoLibro>
+
+@{
+    ViewBag.Title = "Catalogo de libros";
+}
+
+<link href="~/Content/animate.min.css" rel="stylesheet" type="text/css" />
+<br />
+<div class="d-flex justify-content-between align-items-center">
+    <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 16 16">
+            <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783" />
+        </svg>
+        <strong>Catalogo de libros</strong>
+    </h2>
+    @if (User.IsInRole("User") && ViewBag.CantidadCarritoCompra > 0)
+    {
+        <a href="@Url.Action("Carrito", "Productos")" class="btn btn-dark position-relative" id="btnCarritoCompras">
+            Mi carrito de compras
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @ViewBag.CantidadCarritoCompra
+                <span class="visually-hidden">Productos seleccionados</span>
+            </span>
+        </a>
+    }
+</div>
+@if (TempData["ValidationMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
+        @Html.Raw(@TempData["ValidationMessage"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["OkMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+        @Html.Raw(@TempData["OkMessage"])
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (Model != null && Model.Any())
+{
+    <div class="d-flex flex-wrap mt-3">
+        @foreach (var item in Model)
+        {
+
+            <div class="card me-3 mb-3 animate__animated animate__zoomIn" style="width: 18rem;">
+                <img src="~/Images/@Html.DisplayFor(modelItem => item.ImagenVinculada)" class="card-img-top cursor-pointer" alt="Portada del libro"
+                     data-bs-toggle="modal" data-bs-target="#modalImagen"
+                     data-titulomodal="@Html.DisplayFor(modelItem => item.Nombre)"
+                     data-urlimagen="/Images/@Html.DisplayFor(modelItem => item.ImagenVinculada)">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                        @if (item.CantidadDisponible == 0)
+                        {
+                            <span class="badge bg-danger">agotado</span>
+                        }
+                    </h5>
+                    <p class="card-text"
+                       data-bs-toggle="popover"
+                       data-bs-trigger="click"
+                       data-bs-html="true"
+                       data-bs-content='<div style="max-height:300px; overflow:auto;">@Html.DisplayFor(modelItem => item.Descripcion)</div>'>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </p>
+
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>@Html.DisplayNameFor(model => model.ISBN) :</strong>
+                        @Html.DisplayFor(modelItem => item.ISBN)
+                    </li>
+                    <li class="list-group-item">
+                        <strong>@Html.DisplayNameFor(model => model.CantidadDisponible) :</strong>
+                        <span class="badge @(item.CantidadDisponible > 0 ? "text-bg-dark" : "text-bg-light")">@Html.DisplayFor(modelItem => item.CantidadDisponible)</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>@Html.DisplayNameFor(model => model.Precio):</strong>
+                        <span class="badge @(item.CantidadDisponible > 0 ? "bg-success" : "text-bg-light")">
+                            @Html.DisplayFor(modelItem => item.Precio)
+                        </span>
+                    </li>
+                </ul>
+                @if (User.IsInRole("User") && item.CantidadDisponible > 0)
+                {
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center acciones-card">
+                            @using (Html.BeginForm("AgregarAlCarrito", "Productos", FormMethod.Post))
+                            {@Html.AntiForgeryToken()
+                            @Html.Hidden("id", item.Id, new { id = "id-" + item.Id })
+                            <div class="input-group mb-3" style="max-width: 150px; width: 100%;">
+                                <button class="btn btn-outline-secondary" type="button" id="button-decrement-@(item.Id)">-</button>
+                                @Html.TextBox("cantidad", 1, new
+                                {
+                                   type = "number",
+                                   @class = "form-control text-center",
+                                   min = "1",
+                                   max = item.CantidadDisponible,
+                                   id = "input-quantity-" + item.Id
+                                })
+                                <button class="btn btn-outline-secondary" type="button" id="button-increment-@(item.Id)">+</button>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 btncc">Agregar al carrito</button>
+                        }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <p>No hay productos en el catalogo.</p>
+}
+<br />
+@Html.Partial("_ModalPartial")
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let paragraphs = document.querySelectorAll('.card-text');
+
+            paragraphs.forEach(function (par) {
+                if (par.scrollHeight > 250) {
+                    par.classList.add('ellipsis');
+                    par.setAttribute('data-bs-toggle', 'popover');
+                    par.setAttribute('data-bs-trigger', 'click');
+                    par.setAttribute('data-bs-html', 'true');
+
+                    par.setAttribute('data-bs-content',
+                        `<div style="max-height:300px; overflow:auto;">${par.innerHTML}</div>`
+                    );
+                    new bootstrap.Popover(par, {
+                        container: 'body',
+                        html: true,
+                        sanitize: false,
+                    });
+                }
+            });
+        });
+        document.querySelectorAll("[id^='button-decrement-']").forEach(function (button) {
+            button.addEventListener('click', function () {
+                var id = this.id.split('-').pop();
+                var input = document.getElementById('input-quantity-' + id);
+                var value = parseInt(input.value);
+                if (value > parseInt(input.min)) {
+                    input.value = value - 1;
+                }
+            });
+        });
+
+        document.querySelectorAll("[id^='button-increment-']").forEach(function (button) {
+            button.addEventListener('click', function () {
+                var id = this.id.split('-').pop();
+                var input = document.getElementById('input-quantity-' + id);
+                var value = parseInt(input.value);
+                if (value < parseInt(input.max)) {
+                    input.value = value + 1;
+                }
+            });
+        });
+        var modalImagen = document.getElementById('modalImagen')
+        modalImagen.addEventListener('show.bs.modal', function (event) {
+            console.log(event.relatedTarget.dataset);
+            var titulomodal = event.relatedTarget.dataset.titulomodal;
+            var urlimagen = event.relatedTarget.dataset.urlimagen;
+            document.getElementById('titleImageModal').innerText = titulomodal;
+            document.getElementById('previewImageModal').setAttribute('src', urlimagen);
+        })
+    </script>
+}
+
+
