@@ -1,4 +1,5 @@
-﻿using Microsoft.SqlServer.Server;
+﻿
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -168,14 +169,19 @@ namespace TiendaVirtual.Controllers
             
             StockAlerta stock = db.StocksAlerta.Find(producto.Id);
             if (stock != null)
-            {
-                stock.ReStock = true;
+            {                
+                stock.ReStock = producto.CantidadDisponible >= 2;
+                if (producto.CantidadDisponible < 2) {
+                    stock.FechaUltimaAlerta = DateTime.Now;
+                    stock.ReStock = false;
+                } else stock.ReStock = true;
                 db.Entry(stock).State = EntityState.Modified;
             }
             else if(producto.CantidadDisponible < 2){
                 stock = new StockAlerta();
                 stock.ProductoLibro = producto;
                 stock.ReStock = false;
+                stock.FechaUltimaAlerta = DateTime.Now;
                 db.StocksAlerta.Add(stock);
             }
             db.SaveChanges();

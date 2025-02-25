@@ -385,9 +385,10 @@ namespace TiendaVirtual.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult LogOff(CarritoCompra carrito)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            if(carrito!= null && carrito.Any()) carrito.Clear();
             return RedirectToAction("Index", "Home");
         }
 
