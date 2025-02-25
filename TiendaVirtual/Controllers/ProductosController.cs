@@ -223,6 +223,9 @@ namespace TiendaVirtual.Controllers
         [Authorize(Roles = "User")]
         public ActionResult Carrito(CarritoCompra carrito)
         {
+            decimal totalImporte = 0;            
+            totalImporte = carrito != null && carrito.Any() ? carrito.Sum(p => p.CantidadDisponible * p.Precio):0;
+            ViewBag.TotalImporte = totalImporte;
             return View(carrito);
         }
         

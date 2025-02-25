@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TiendaVirtual.Models.ProductoLibro>
 
 @{
-    ViewBag.Title = "Carrito de Compras";
+    ViewBag.Title = "Carrito de Compras";    
 }
 
 <br />
@@ -49,10 +49,10 @@
                     <td>@producto.CantidadDisponible</td>
                     <td>@producto.Precio</td>
                     <td>
-                        <img src="@Url.Content("~/Images/" + producto.ImagenVinculada)" alt="Imagen del producto" class="img-fluid fixed-size cursor-pointer" 
-                                                                  data-bs-toggle="modal" data-bs-target="#modalImagen"
-                                     data-titulomodal="@producto.Nombre"
-                                     data-urlimagen="/Images/@producto.ImagenVinculada"/>
+                        <img src="@Url.Content("~/Images/" + producto.ImagenVinculada)" alt="Imagen del producto" class="img-fluid fixed-size cursor-pointer"
+                             data-bs-toggle="modal" data-bs-target="#modalImagen"
+                             data-titulomodal="@producto.Nombre"
+                             data-urlimagen="/Images/@producto.ImagenVinculada" />
                     </td>
                     <td>
                         @using (Html.BeginForm("EliminarSeleccionadoCarrito", "Productos", FormMethod.Post))
@@ -84,6 +84,17 @@
 
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end">
+                    <strong>Importe:</strong>
+                </td>
+                <td>
+                    <h5 class="mb-0 text-success">@ViewBag.TotalImporte €</h5>                    
+                </td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
     </table>
     <div class="d-flex gap-2">
         <p>
